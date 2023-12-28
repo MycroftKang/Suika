@@ -44,7 +44,7 @@ export const getFruitFeature = (fruit: FruitType) => {
     case Fruit.WATERMELON:
       return { radius: getRenderWidth() / (3.5 * weight), mass: 1, label: Fruit.WATERMELON, score: 66 };
     case Fruit.GOLDWATERMELON:
-      return { radius: getRenderWidth() / (3.5 * weight), mass: 1,label: Fruit.GOLDWATERMELON, score: 100 };
+      return { radius: getRenderWidth() / 3.5, mass: 1,label: Fruit.GOLDWATERMELON, score: 100 };
   }
 }
 
