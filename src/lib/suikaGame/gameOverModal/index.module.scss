@@ -1,0 +1,95 @@
+.gameOverArea {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: #000000cc;
+  user-select: none;
+  font-family: 'Patrick Hand', 'Pretendard';
+
+  .text {
+    font-family: 'Patrick Hand', 'Pretendard';
+    font-size: 4em;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .score {
+    margin-top: .3em;
+    font-family: 'Patrick Hand', 'Pretendard';
+    font-size: 2em;
+    color: #fff;
+  }
+
+  .btn {
+    padding: .5em .7em;
+    margin-top: .6em;
+    background: #fff;
+
+    font-family: 'Patrick Hand', 'Pretendard';
+    font-size: 2em;
+    font-weight: 700;
+    color: #000;
+    border-radius: 36px;
+    cursor: pointer;
+  }
+  
+  .linkArea {
+    position: fixed;
+    bottom: 32px;
+
+    .formsLink {
+      font-size: 1em;
+      color: #ffffff;
+    }
+  
+    .shareaBtn {
+      position: relative;
+      margin-left: 12px;
+      font-size: 1em;
+      color: #ffffff;
+      cursor: pointer;
+  
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -6px;
+        transform: translate(0, 50%);
+        display: block;
+        width: 1px;
+        height: 50%;
+        background: #ffffff;
+      }
+    }
+  }
+
+  .toastArea {
+    visibility: hidden;
+    position: fixed;
+    bottom: 30px;
+    padding: 1.5em;
+    font-size: 1em;
+    border-radius: 2px;
+    color: #ffffff;
+    background: #111;
+
+    &.show {
+      visibility: visible;
+      animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+  }
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}

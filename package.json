@@ -1,0 +1,63 @@
+{
+  "homepage": ".",
+  "name": "suika-game",
+  "version": "1.0.4",
+  "private": false,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "browser": "./browser/specific/main.js",
+  "description": "suika-game",
+  "author": {
+    "name": "koreacat",
+    "email": "koreacat0w0@gmail.com",
+    "url": "https://github.com/koreacat"
+  },
+  "license": "koreacat - MIT License",
+  "keywords": [
+    "suika",
+    "game"
+  ],
+  "dependencies": {
+    "@types/canvas-confetti": "^1.6.2",
+    "@types/matter-js": "^0.14.10",
+    "@types/node": "^16.7.13",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "canvas-confetti": "^1.9.0",
+    "classnames": "^2.2.6",
+    "gh-pages": "^5.0.0",
+    "matter-js": "^0.19.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "sass": "^1.32.8",
+    "typescript": "^4.4.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "prepare": "tsc",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

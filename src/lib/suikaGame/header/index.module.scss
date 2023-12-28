@@ -1,0 +1,74 @@
+.headerArea {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 0.2em;
+  user-select: none;
+
+  .bestScoreArea {
+    flex: 1;
+    display: flex;
+    height: 3em;
+    flex-direction: column;
+    color: #fff;
+
+    .text {
+      font-family: 'Patrick Hand', 'Pretendard', serif;
+      font-size: 0.8em;
+      font-weight: 700;
+    }
+
+    .number {
+      font-family: 'Pacifico', 'Pretendard', serif;
+      font-size: 2em;
+      line-height: .5em;
+      margin-top: 0.1em;
+      letter-spacing: -2px;
+    }
+  }
+
+  .scoreArea {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .score {
+      font-family: 'Pacifico', 'Pretendard', serif;
+      font-size: 3.5em;
+      line-height: 1.3em;
+      color: #fff;
+    }
+  }
+
+  .nextArea {
+    flex: 1;
+    display: flex;
+    height: 3em;
+    flex-direction: column;
+    text-align: right;
+
+    .text {
+      font-family: 'Patrick Hand', 'Pretendard', serif;
+      font-size: 0.8em;
+      font-weight: 700;
+      color: #fff;
+      user-select: none;
+    }
+
+    .next {
+      width: 100%;
+      height: 2em;
+      padding: .2em 0;
+
+      .img {
+        display: flex;
+        height: 1.8em;
+        background-position: right;
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+    }
+  }
+}

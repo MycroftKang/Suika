@@ -1,0 +1,44 @@
+.gameArea {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(0deg, #f5f1c4, #cfa76f, #a0633b);
+
+  .gameWrap {
+    position: relative;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.canvasArea {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  gap: 0.2em;
+  // max-height: 774px; // canvas:704 + header:64 + margin:8
+
+  .canvasWrap {
+    user-select: none;
+  }
+
+  canvas {
+    border: 2px solid #ffffff80;
+    border-radius: 16px;
+    user-select: none;
+    cursor: pointer;
+  }
+}
