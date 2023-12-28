@@ -17,7 +17,7 @@ export enum Fruit {
 
 export type FruitType = keyof typeof Fruit;
 
-const weight = 1.05
+const weight = 1.2
 
 export const getFruitFeature = (fruit: FruitType) => {
   switch (fruit) {
