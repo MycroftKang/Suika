@@ -72,7 +72,7 @@ export const getItemTypeFeature = (item: ItemType) => {
 export const getRandomFruitFeature = () => {
   // return getSpecialItemFeature(SpecialItem.BOMB);
 
-  if (Math.random() < 0.98 || first_fruit) {
+  if (Math.random() < 0.995 || first_fruit) {
     first_fruit = false;
     const fruits = Object.values(Fruit).slice(0, 5);
     const randomIndex = Math.floor(Math.random() * fruits.length); // 무작위 인덱스 선택
