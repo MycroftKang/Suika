@@ -181,7 +181,15 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
       const labelB = bodyB.label as Fruit;
 
       if (bodyA.isSensor || bodyB.isSensor) return;
-      if (labelA === Fruit.GOLDWATERMELON && labelB === Fruit.GOLDWATERMELON) return;
+      if (labelA === Fruit.GOLDWATERMELON && labelB === Fruit.GOLDWATERMELON) {
+        World.remove(engine.world, bodyA);
+        World.remove(engine.world, bodyB);
+        effects.fireConfetti();
+
+        const score = getFruitFeature(labelA)?.score || 0;
+        props.setScore(prev => prev + score);
+        return;
+      }
 
       // 이미 합치는 중이면 무시
       if (prevMergingFruitIds.includes(bodyA.id) || prevMergingFruitIds.includes(bodyB.id)) return prevMergingFruitIds = [];
@@ -202,7 +210,8 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
         const label = feature?.label as Fruit;
         const radius = feature?.radius || 1;
         const mass = feature?.mass || 1;
-        const score = feature?.score || 0;
+        // const score = feature?.score || 0;
+        const score = getFruitFeature(labelA)?.score || 0;
 
         // 수박이 만들어지면 폭죽 이펙트
         if(label === Fruit.WATERMELON) effects.fireConfetti();

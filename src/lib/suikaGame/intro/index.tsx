@@ -51,7 +51,7 @@ const Intro = ({isVisible, handleGameStart}: IntroProps) => {
       </div>
 
       <a href={'https://github.com/koreacat/suika-game#readme'} target='_blank' className={cx('patchLink')}>패치노트</a>
-      <span className={cx('version')}>v1.0.4</span>
+      <span className={cx('version')}>v1.0.5</span>
     </div>
   )
 }
