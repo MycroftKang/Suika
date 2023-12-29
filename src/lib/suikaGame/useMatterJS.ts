@@ -1,7 +1,7 @@
 import Matter from 'matter-js';
 import { SetStateAction, useEffect } from "react";
 import Wall, { WALL_BACK } from "./object/Wall";
-import { Fruit, getFruitFeature, getNextFruitFeature, getRandomFruitFeature } from "./object/Fruit";
+import { Fruit, getFruitFeature, getNextFruitFeature, getRandomFruitFeature, SpecialItem, ItemType, getItemTypeFeature } from "./object/Fruit";
 import { getRenderHeight, getRenderWidth } from "./object/Size";
 import { GameOverLine, GameOverGuideLine } from './object/GameOverLine';
 import { GuideLine, GuideLineColor } from './object/GuideLine';
@@ -9,7 +9,7 @@ import useConfetti from "./useConfetti";
 
 const { Engine, Render, World, Mouse, MouseConstraint } = Matter;
 const frameInterval = 1000 / 60; // 60fps
-const getImgUrl = (fruit: Fruit) => require('../../resource/' + fruit + '.png');
+const getImgUrl = (fruit: ItemType) => require('../../resource/' + fruit + '.png');
 
 let engine = Engine.create();
 let render: Matter.Render | null = null;
@@ -18,8 +18,11 @@ let lastTime = 0;
 let fixedItemTimeOut: NodeJS.Timeout | null = null;
 let fixedItem: Matter.Body | null = null; // 고정된 아이템
 let prevPosition = { x: getRenderWidth() / 2, y: 50 };
-let nextFruit: Fruit | null = null;
+let nextFruit: ItemType | null = null;
 let prevMergingFruitIds: number[] = [];
+
+// let bomb = false;
+// let bomb_position: Matter.Vector;
 
 const renderOptions = {
   width: getRenderWidth(),
@@ -44,7 +47,7 @@ const init = (props: UseMatterJSProps) => {
 const createFixedItem = ({ setNextItem }: UseMatterJSProps) => {
   if (fixedItem) return;
   if (!nextFruit) return;
-  const feature = getFruitFeature(nextFruit);
+  const feature = getItemTypeFeature(nextFruit);
   const label = feature?.label as Fruit;
   const radius = feature?.radius || 1;
   const mass = feature?.mass || 1;
@@ -130,7 +133,7 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
     const popSound = new Audio(require('../../resource/pop.mp3'));
     popSound.play();
     const label = fixedItem?.label as Fruit;
-    const feature = getFruitFeature(label);
+    const feature = getItemTypeFeature(label);
     const radius = feature?.radius || 1;
     const mass = feature?.mass || 1;
     const newItem = Matter.Bodies.circle(fixedItem.position.x, fixedItem.position.y, radius, {
@@ -169,18 +172,36 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
       const bodyA = pair.bodyA;
       const bodyB = pair.bodyB;
       
+      
       if (bodyA.label === GameOverLine.label || bodyB.label === GameOverLine.label) {
-        handleGameOver(props);
+        if (!(bodyA.label === SpecialItem.BOMB || bodyB.label === SpecialItem.BOMB)) {
+          handleGameOver(props);
+        }
         return;
       }
-
+      
       const midX = (bodyA.position.x + bodyB.position.x) / 2;
       const midY = (bodyA.position.y + bodyB.position.y) / 2;
-
+      
       const labelA = bodyA.label as Fruit;
       const labelB = bodyB.label as Fruit;
-
+      
       if (bodyA.isSensor || bodyB.isSensor) return;
+      
+      if (bodyA.label === SpecialItem.BOMB) {
+        World.remove(engine.world, bodyA);
+        if (Object.values(Fruit).includes(bodyB.label as Fruit)) {
+          World.remove(engine.world, bodyB);
+        }
+        return;
+      } else if (bodyB.label === SpecialItem.BOMB) {
+        World.remove(engine.world, bodyB);
+        if (Object.values(Fruit).includes(bodyA.label as Fruit)) {
+          World.remove(engine.world, bodyA);
+        }
+        return;
+      }
+      
       if (labelA === Fruit.GOLDWATERMELON && labelB === Fruit.GOLDWATERMELON) {
         World.remove(engine.world, bodyA);
         World.remove(engine.world, bodyB);
@@ -236,12 +257,54 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
 
         World.add(engine.world, newFruit);
         props.setScore(prev => prev + score);
+        // explosion();
       }
     });
   });
 
   // World.add(engine.world, mouseConstraint);
 };
+
+  // Matter.Events.on(engine, 'beforeUpdate', function(event) {
+  //   if (bomb) {
+  //     bomb = false;
+  //     explosion();
+  //   }
+  // });
+
+// function explosion() {
+//   const bodies = Matter.Composite.allBodies(engine.world);
+
+//   for (let i = 0; i < bodies.length; ++i) {
+//     const body = bodies[i];
+
+//     if (!body.isStatic) {
+//       const forceMagnitude = 3 * body.mass;
+
+//       // console.log(body.label);
+//       // let vec = {
+//       //   x:
+//       //     (forceMagnitude + Matter.Common.random() * forceMagnitude) *
+//       //     Matter.Common.choose([1, -1]),
+//       //   y: -forceMagnitude + Matter.Common.random() * -forceMagnitude
+//       // }
+
+//       // let vec = body.position - bomb_position;
+//       let vec = Matter.Vector.sub(body.position, bomb_position);
+//       let mag = Matter.Vector.magnitude(vec);
+//       vec = Matter.Vector.normalise(vec);
+//       vec = Matter.Vector.div(vec, mag);
+//       vec = Matter.Vector.mult(vec, forceMagnitude);
+//       vec.y = vec.y * -1;
+
+//       console.log(vec)
+
+//       Matter.Body.applyForce(body, body.position, vec);
+
+//       // console.log(body.label, vec);
+//     }
+//   }
+// }
 
 const animate = (currentTime: number) => {
   requestAnimation = requestAnimationFrame(animate);

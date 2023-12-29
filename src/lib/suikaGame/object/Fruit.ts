@@ -1,5 +1,9 @@
 import { getRenderWidth } from "./Size";
 
+export enum SpecialItem {
+  BOMB = "BOMB"
+}
+
 export enum Fruit {
   BLUEBERRY = "BLUEBERRY",
   STRAWBERRY = "STRAWBERRY",
@@ -16,10 +20,21 @@ export enum Fruit {
 }
 
 export type FruitType = keyof typeof Fruit;
+export type ItemType = SpecialItem | Fruit;
 
 const weight = 1.05
+let first_fruit = true;
 
-export const getFruitFeature = (fruit: FruitType) => {
+export const getSpecialItemFeature = (item: ItemType) => {
+  switch (item) {
+    case SpecialItem.BOMB:
+      return { radius: getRenderWidth() / (30 * weight), mass: 1, label: SpecialItem.BOMB, score: null };
+    default:
+      return null;
+  }
+}
+
+export const getFruitFeature = (fruit: ItemType) => {
   switch (fruit) {
     case Fruit.BLUEBERRY:
       return { radius: getRenderWidth() / (24 * weight), mass: 0.8, label: Fruit.BLUEBERRY, score: 1 };
@@ -44,15 +59,28 @@ export const getFruitFeature = (fruit: FruitType) => {
     case Fruit.WATERMELON:
       return { radius: getRenderWidth() / (3.5 * weight), mass: 1, label: Fruit.WATERMELON, score: 66 };
     case Fruit.GOLDWATERMELON:
-      return { radius: getRenderWidth() / 3.5, mass: 1,label: Fruit.GOLDWATERMELON, score: 78 };
+      return { radius: getRenderWidth() / (3.5 * weight), mass: 1, label: Fruit.GOLDWATERMELON, score: 78 };
+    default:
+      return null;
   }
 }
 
+export const getItemTypeFeature = (item: ItemType) => {
+  return getFruitFeature(item) || getSpecialItemFeature(item)
+}
+
 export const getRandomFruitFeature = () => {
-  const fruits = Object.values(Fruit).slice(0, 5);
-  const randomIndex = Math.floor(Math.random() * fruits.length); // 무작위 인덱스 선택
-  return getFruitFeature(fruits[randomIndex]);
-};
+  // return getSpecialItemFeature(SpecialItem.BOMB);
+
+  if (Math.random() < 0.95 || first_fruit) {
+    first_fruit = false;
+    const fruits = Object.values(Fruit).slice(0, 5);
+    const randomIndex = Math.floor(Math.random() * fruits.length); // 무작위 인덱스 선택
+    return getFruitFeature(fruits[randomIndex]);
+  } else {
+    return getSpecialItemFeature(SpecialItem.BOMB);
+  };
+}
 
 export const getNextFruitFeature = (currentFruit: Fruit) => {
   // 현재 과일의 순서를 찾기
