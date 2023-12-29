@@ -22,7 +22,7 @@ export enum Fruit {
 export type FruitType = keyof typeof Fruit;
 export type ItemType = SpecialItem | Fruit;
 
-const weight = 1.05
+const weight = 1.1
 let first_fruit = true;
 
 export const getSpecialItemFeature = (item: ItemType) => {
