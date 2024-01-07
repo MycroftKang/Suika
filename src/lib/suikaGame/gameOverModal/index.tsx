@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import styles from './index.module.scss';
 import classNames from "classnames/bind";
+import html2canvas from 'html2canvas';
+
 
 const cx = classNames.bind(styles);
 
@@ -16,6 +18,23 @@ const GameOverModal = ({ isVisible, onClick, score }: GameOverModalProps) => {
   const [toastVisible, setToastVisible] = useState(false);
 
   if (!isVisible) return null;
+
+  const target = document.querySelector("#canvasWrap > canvas") as HTMLElement;
+
+  if (target) {
+    html2canvas(target, {allowTaint:true,  backgroundColor:"#cfa76f"}).then((canvas) => {
+      let dtag = document.getElementById("gframe");
+
+      canvas.style.width = "60%";
+      canvas.style.borderRadius = "9px";
+      canvas.style.removeProperty("height");
+      if (dtag) {
+        dtag.innerHTML = '';
+        dtag.appendChild(canvas);
+      }
+    })
+  }
+
 
   const share = () => {
 
@@ -55,6 +74,7 @@ const GameOverModal = ({ isVisible, onClick, score }: GameOverModalProps) => {
     <div className={cx('gameOverArea')}>
       <span className={cx('text')}>GAME OVER</span>
       <span className={cx('score')}>SCORE: {score}</span>
+      <div id='gframe' className={cx('gframe')}></div>
       <button className={cx('btn')} onClick={onClick}>↻ TRY AGAIN?</button>
       <div className={cx('linkArea')}>
         {/* <a href={'https://forms.gle/QbPDG6rzT4spywyf6'} target='_blank' className={cx('formsLink')}>의견 남기기</a> */}
