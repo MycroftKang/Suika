@@ -75,7 +75,7 @@ const GameOverModal = ({ isVisible, onClick, score }: GameOverModalProps) => {
       <span className={cx('text')}>GAME OVER</span>
       <span className={cx('score')}>SCORE: {score}</span>
       <div id='gframe' className={cx('gframe')}></div>
-      <button className={cx('btn')} onClick={onClick}>↻ TRY AGAIN?</button>
+      <button className={cx('btn')} onClick={onClick}>↻ TRY AGAIN</button>
       <div className={cx('linkArea')}>
         {/* <a href={'https://forms.gle/QbPDG6rzT4spywyf6'} target='_blank' className={cx('formsLink')}>의견 남기기</a> */}
         <button className={cx('shareaBtn')} onClick={share}>공유하기</button>

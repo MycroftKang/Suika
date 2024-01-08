@@ -189,17 +189,9 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
       if (bodyA.isSensor || bodyB.isSensor) return;
       
       if (bodyA.label === SpecialItem.BOMB) {
-        World.remove(engine.world, bodyA);
-        if (Object.values(Fruit).includes(bodyB.label as Fruit)) {
-          World.remove(engine.world, bodyB);
-        }
-        return;
+        handleBomb(bodyA, bodyB);
       } else if (bodyB.label === SpecialItem.BOMB) {
-        World.remove(engine.world, bodyB);
-        if (Object.values(Fruit).includes(bodyA.label as Fruit)) {
-          World.remove(engine.world, bodyA);
-        }
-        return;
+        handleBomb(bodyB, bodyA);
       }
       
       if (labelA === Fruit.GOLDWATERMELON && labelB === Fruit.GOLDWATERMELON) {
@@ -263,7 +255,30 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
   });
 
   // World.add(engine.world, mouseConstraint);
+  function handleBomb(bomb: Matter.Body, fruit: Matter.Body) {
+    const fruits = Object.values(Fruit);
+  
+    World.remove(engine.world, bomb);
+    if (fruits.includes(fruit.label as Fruit)) {
+      World.remove(engine.world, fruit);
+      
+      const index = fruits.indexOf(fruit.label as Fruit);
+      
+      if (index > 4) {
+        const targetFruits = fruits.slice(5, index + 1);
+  
+        let mscore = 0;
+        targetFruits.forEach(element => {
+          mscore += getFruitFeature(element)?.score || 0;
+        });
+  
+        props.setScore(prev => prev - mscore);
+      }
+    }
+    return;
+  }
 };
+
 
   // Matter.Events.on(engine, 'beforeUpdate', function(event) {
   //   if (bomb) {
