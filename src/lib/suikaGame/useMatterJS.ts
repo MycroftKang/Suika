@@ -265,7 +265,7 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
       const index = fruits.indexOf(fruit.label as Fruit);
       
       if (index > 4) {
-        const targetFruits = fruits.slice(5, index + 1);
+        const targetFruits = fruits.slice(4, index);
   
         let mscore = 0;
         targetFruits.forEach((element, i) => {
