@@ -19,7 +19,7 @@ let firstLandscape = false;
 function handleRotation(first: boolean = false) {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-  if (isMobile && window.screen.orientation.type === 'landscape-primary') {
+  if (isMobile && window.screen.orientation.type.startsWith('landscape')) {
     let rootDiv = document.getElementById("root");
     let screenDiv = document.getElementById("rotateScreen");
     if (rootDiv) {
@@ -34,7 +34,7 @@ function handleRotation(first: boolean = false) {
       firstLandscape = true;
     }
   }
-  else if (isMobile && window.screen.orientation.type === 'portrait-primary')
+  else if (isMobile && window.screen.orientation.type.startsWith('portrait'))
   {
     if (firstLandscape) {
       window.location.reload();
