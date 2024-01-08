@@ -70,7 +70,13 @@ export const getItemTypeFeature = (item: ItemType) => {
 }
 
 export const getRandomFruitFeature = () => {
-  // return getSpecialItemFeature(SpecialItem.BOMB);
+  // if (first_fruit) {
+  //   first_fruit = false;
+  //   return getFruitFeature(Fruit.WATERMELON);
+  // }
+  // else {
+  //   return getSpecialItemFeature(SpecialItem.BOMB);
+  // }
 
   if (Math.random() < 0.98 || first_fruit) {
     first_fruit = false;

@@ -268,8 +268,8 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
         const targetFruits = fruits.slice(5, index + 1);
   
         let mscore = 0;
-        targetFruits.forEach(element => {
-          mscore += getFruitFeature(element)?.score || 0;
+        targetFruits.forEach((element, i) => {
+          mscore += (getFruitFeature(element)?.score || 0) * (2 ** (targetFruits.length - i - 1));
         });
   
         props.setScore(prev => prev - mscore);
