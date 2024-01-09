@@ -22,7 +22,7 @@ export enum Fruit {
 export type FruitType = keyof typeof Fruit;
 export type ItemType = SpecialItem | Fruit;
 
-const weight = 1.1
+const weight = 1.1;
 let first_fruit = true;
 
 export const getSpecialItemFeature = (item: ItemType) => {
@@ -72,10 +72,11 @@ export const getItemTypeFeature = (item: ItemType) => {
 export const getRandomFruitFeature = () => {
   // if (first_fruit) {
   //   first_fruit = false;
-  //   return getFruitFeature(Fruit.WATERMELON);
+  //   return getFruitFeature(Fruit.MELON);
   // }
   // else {
-  //   return getSpecialItemFeature(SpecialItem.BOMB);
+  //   return getFruitFeature(Fruit.MELON);
+  //   // return getSpecialItemFeature(SpecialItem.BOMB);
   // }
 
   if (Math.random() < 0.98 || first_fruit) {

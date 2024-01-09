@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import styles from './index.module.scss';
 import classNames from "classnames/bind";
 import useMatterJS from "./useMatterJS";
-import { Fruit, getRandomFruitFeature } from './object/Fruit';
+import { Fruit, SpecialItem, getRandomFruitFeature } from './object/Fruit';
 import GameOverModal from './gameOverModal';
 import Intro from './intro';
 import Header from './header';
@@ -12,11 +12,12 @@ const cx = classNames.bind(styles);
 const SuikaGame = () => {
   const [bestScore, setBestScore] = useState(0);
   const [score, setScore] = useState(0);
-  const [nextItem, setNextItem] = useState<Fruit>(getRandomFruitFeature()?.label as Fruit);
+  const [bombItemCount, setBombItemCount] = useState<number>(0);
+  const [nextItem, setNextItem] = useState<Fruit | SpecialItem>(getRandomFruitFeature()?.label as Fruit | SpecialItem);
   const [isStart, setIsStart] = useState<boolean>(false);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
-  const { clear } = useMatterJS({ score, setScore, nextItem, setNextItem, isGameOver, setIsGameOver });
+  const { clear, createFixedItem } = useMatterJS({ score, setScore, bombItemCount, setBombItemCount, nextItem, setNextItem, isGameOver, setIsGameOver });
 
   useEffect(() => {
     const bestScore = localStorage.getItem('bestScore');
@@ -34,9 +35,18 @@ const SuikaGame = () => {
 
   const handleTryAgain = () => {
     setScore(0);
+    setBombItemCount(0);
     setNextItem(getRandomFruitFeature()?.label as Fruit);
     setIsGameOver(false);
     clear();
+  }
+
+  const handleBombItem = () => {
+    if (bombItemCount > 0) {
+      if (createFixedItem(SpecialItem.BOMB)) {
+        setBombItemCount(prev => prev - 1);
+      }
+    }
   }
 
   const handleGameStart = () => {
@@ -47,7 +57,7 @@ const SuikaGame = () => {
     <div className={cx('gameArea')}>
       <div className={cx('gameWrap')} style={{ visibility: isStart ? 'visible' : 'hidden'}}>
         <div className={cx('canvasArea')}>
-          <Header bestScore={bestScore} score={score} nextItem={nextItem}/>
+          <Header bestScore={bestScore} score={score} bombItemCount={bombItemCount} nextItem={nextItem} onClick={handleBombItem}/>
           <div id={'canvasWrap'} className={cx('canvasWrap')}/>
         </div>
       </div>

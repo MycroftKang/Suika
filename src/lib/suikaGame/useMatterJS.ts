@@ -7,6 +7,7 @@ import { GameOverLine, GameOverGuideLine } from './object/GameOverLine';
 import { GuideLine, GuideLineColor } from './object/GuideLine';
 import useConfetti from "./useConfetti";
 
+
 const { Engine, Render, World, Mouse, MouseConstraint } = Matter;
 const frameInterval = 1000 / 60; // 60fps
 const getImgUrl = (fruit: ItemType) => require('../../resource/' + fruit + '.png');
@@ -21,6 +22,7 @@ let prevPosition = { x: getRenderWidth() / 2, y: 50 };
 let nextFruit: ItemType | null = null;
 let prevMergingFruitIds: number[] = [];
 
+let useMatterJSProps: UseMatterJSProps;
 // let bomb = false;
 // let bomb_position: Matter.Vector;
 
@@ -41,17 +43,36 @@ const init = (props: UseMatterJSProps) => {
   World.add(engine.world, [...Wall]);
   World.add(engine.world, [GameOverGuideLine, GuideLine]);
   nextFruit = props.nextItem;
-  createFixedItem(props);
+  useMatterJSProps = props;
+  createFixedItem();
 };
 
-const createFixedItem = ({ setNextItem }: UseMatterJSProps) => {
-  if (fixedItem) return;
-  if (!nextFruit) return;
-  const feature = getItemTypeFeature(nextFruit);
+const createFixedItem = (item: Fruit | SpecialItem | null = null) => {
+  if (fixedItem && !item) return false;
+  if (!nextFruit) return false;
+
+  let target: Fruit | SpecialItem;
+  let position: number = prevPosition.x;
+
+  if (item) {
+    target = item;
+    
+    if (fixedItem) {
+      if (fixedItem.label === item) {
+        return false;
+      }
+      position = fixedItem.position.x;
+      World.remove(engine.world, fixedItem);
+    }
+  } else {
+    target = nextFruit;
+  }
+
+  const feature = getItemTypeFeature(target);
   const label = feature?.label as Fruit;
   const radius = feature?.radius || 1;
   const mass = feature?.mass || 1;
-  fixedItem = Matter.Bodies.circle(prevPosition.x, prevPosition.y, radius, {
+  fixedItem = Matter.Bodies.circle(position, prevPosition.y, radius, {
     isStatic: true,
     isSensor: true,
     label: label,
@@ -68,9 +89,13 @@ const createFixedItem = ({ setNextItem }: UseMatterJSProps) => {
   });
   World.add(engine.world, fixedItem);
 
-  const newNextItem = getRandomFruitFeature()?.label as Fruit;
-  nextFruit = newNextItem;
-  setNextItem(newNextItem);
+  if (!item) {
+    const newNextItem = getRandomFruitFeature()?.label as Fruit | SpecialItem;
+    nextFruit = newNextItem;
+    useMatterJSProps.setNextItem(newNextItem);
+  }
+
+  return true;
 }
 
 const handleGameOver = (props: UseMatterJSProps) => {
@@ -162,7 +187,7 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
     fixedItemTimeOut = setTimeout(() => {
       GuideLine.render.fillStyle = GuideLineColor;
       World.add(engine.world, GameOverLine);
-      createFixedItem(props);
+      createFixedItem();
     }, 750);
   });
 
@@ -188,6 +213,9 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
       
       if (bodyA.isSensor || bodyB.isSensor) return;
       
+      // 이미 합치는 중이면 무시
+      if (prevMergingFruitIds.includes(bodyA.id) || prevMergingFruitIds.includes(bodyB.id)) return prevMergingFruitIds = [];
+      
       if (bodyA.label === SpecialItem.BOMB) {
         handleBomb(bodyA, bodyB);
       } else if (bodyB.label === SpecialItem.BOMB) {
@@ -203,9 +231,6 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
         props.setScore(prev => prev + score);
         return;
       }
-
-      // 이미 합치는 중이면 무시
-      if (prevMergingFruitIds.includes(bodyA.id) || prevMergingFruitIds.includes(bodyB.id)) return prevMergingFruitIds = [];
 
       // 같은 크기인 경우에만 합치기
       if (labelA === labelB) {
@@ -227,7 +252,10 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
         const score = getFruitFeature(labelA)?.score || 0;
 
         // 수박이 만들어지면 폭죽 이펙트
-        if(label === Fruit.WATERMELON) effects.fireConfetti();
+        if (label === Fruit.WATERMELON) {
+          props.setBombItemCount(prev => prev + 1);
+          effects.fireConfetti();
+        }
 
         // 황금 수박이 만들어지면 별 이펙트
         if(label === Fruit.GOLDWATERMELON) effects.fireRapidStarConfetti();
@@ -341,8 +369,10 @@ const run = () => {
 interface UseMatterJSProps {
   score: number;
   setScore: React.Dispatch<SetStateAction<number>>;
-  nextItem: Fruit;
-  setNextItem: React.Dispatch<SetStateAction<Fruit>>;
+  bombItemCount: number;
+  setBombItemCount: React.Dispatch<SetStateAction<number>>;
+  nextItem: Fruit | SpecialItem;
+  setNextItem: React.Dispatch<SetStateAction<Fruit | SpecialItem>>;
   isGameOver: boolean;
   setIsGameOver: React.Dispatch<SetStateAction<boolean>>;
 }
@@ -369,7 +399,7 @@ const useMatterJS = (props: UseMatterJSProps) => {
   }
 
   return {
-    clear
+    clear, createFixedItem
   }
 };
 

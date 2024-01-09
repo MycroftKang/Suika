@@ -1,4 +1,4 @@
-import { Fruit } from '../object/Fruit';
+import { Fruit, SpecialItem } from '../object/Fruit';
 import { getRenderWidth } from '../object/Size';
 import styles from './index.module.scss';
 import classNames from "classnames/bind";
@@ -8,12 +8,20 @@ const cx = classNames.bind(styles);
 interface HeaderProps {
   bestScore: number;
   score: number;
-  nextItem: null | Fruit;
+  bombItemCount: number;
+  nextItem: null | Fruit | SpecialItem;
+  onClick: () => void;
 }
 
-const Header = ({ score, bestScore, nextItem }: HeaderProps) => {
+const Header = ({ score, bestScore, bombItemCount, nextItem, onClick }: HeaderProps) => {
   const getBestScore = () => {
     return score > bestScore ? score : bestScore;
+  }
+
+  let bombItemClass = 'bg-secondary';
+
+  if (bombItemCount > 0) {
+    bombItemClass = 'bg-danger';
   }
 
   return (
@@ -24,6 +32,17 @@ const Header = ({ score, bestScore, nextItem }: HeaderProps) => {
       </div>
       <div className={cx('scoreArea')}>
         <span className={cx('score')}>{score}</span>
+      </div>
+      <div className={cx('itemArea')}>
+        <div className={cx('next')}>
+          <button className={`${cx('itemBtn')}`} onClick={onClick}>
+            <img className={cx('img')} src={require('../../../resource/BOMB.png')}></img>
+            <span id='itemBadge' className={`position-absolute start-100 translate-middle badge rounded-pill ${bombItemClass}`} style={{fontSize: "0.6em", top:"85%"}}>
+              {bombItemCount}
+              <span className="visually-hidden">Bomb</span>
+            </span>
+          </button>
+        </div>
       </div>
       <div className={cx('nextArea')}>
         <span className={cx('text')}>NEXT</span>
