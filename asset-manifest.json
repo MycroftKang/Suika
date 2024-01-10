@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.f763086d.css",
-    "main.js": "./static/js/main.6fe65c2d.js",
+    "main.css": "./static/css/main.66fcdcb5.css",
+    "main.js": "./static/js/main.06a32f0e.js",
     "static/media/BOMB.png": "./static/media/BOMB.972d8c28dd9dc139ec3f.png",
     "static/media/GOLDWATERMELON.png": "./static/media/GOLDWATERMELON.1cf4078cde429802200d.png",
     "static/media/AVOCADO.png": "./static/media/AVOCADO.feb5c5c4a43ff1fb2548.png",
@@ -12,11 +12,11 @@
     "static/media/pop.mp3": "./static/media/pop.aad1876107786cd34875.mp3",
     "static/media/pop2.mp3": "./static/media/pop2.be611a1bcb32ab485a96.mp3",
     "index.html": "./index.html",
-    "main.f763086d.css.map": "./static/css/main.f763086d.css.map",
-    "main.6fe65c2d.js.map": "./static/js/main.6fe65c2d.js.map"
+    "main.66fcdcb5.css.map": "./static/css/main.66fcdcb5.css.map",
+    "main.06a32f0e.js.map": "./static/js/main.06a32f0e.js.map"
   },
   "entrypoints": [
-    "static/css/main.f763086d.css",
-    "static/js/main.6fe65c2d.js"
+    "static/css/main.66fcdcb5.css",
+    "static/js/main.06a32f0e.js"
   ]
 }
