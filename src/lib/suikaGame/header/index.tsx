@@ -14,9 +14,10 @@ interface HeaderProps {
   bombItemCount: number;
   nextItem: null | Fruit | SpecialItem;
   onClick: () => void;
+  isStart: boolean;
 }
 
-const Header = ({ score, bestScore, bombItemCount, nextItem, onClick }: HeaderProps) => {
+const Header = ({ score, bestScore, bombItemCount, nextItem, onClick, isStart }: HeaderProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
   
   const getBestScore = () => {
@@ -28,13 +29,15 @@ const Header = ({ score, bestScore, bombItemCount, nextItem, onClick }: HeaderPr
   if (bombItemCount > 0) {
     bombItemClass = 'bg-danger';
   }
-
-  if (lastBombItemCount != undefined && bombItemCount > lastBombItemCount) {
-    setIsAnimating(true);
-    setTimeout(() => setIsAnimating(false), 1000);
+  
+  if (isStart) { 
+    if ((lastBombItemCount != undefined && bombItemCount > lastBombItemCount)) {
+      setIsAnimating(true);
+      setTimeout(() => setIsAnimating(false), 1000);
+    }
+    
+    lastBombItemCount = bombItemCount;
   }
-
-  lastBombItemCount = bombItemCount;
 
   return (
     <div className={cx('headerArea')} style={{ maxWidth: getRenderWidth() + 4 }}>

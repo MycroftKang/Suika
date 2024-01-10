@@ -46,7 +46,7 @@ const SuikaGame = () => {
 
   const handleTryAgain = () => {
     setScore(0);
-    setBombItemCount(0);
+    // setBombItemCount(0);
     setNextItem(getRandomFruitFeature()?.label as Fruit);
     setIsGameOver(false);
     clear();
@@ -68,7 +68,7 @@ const SuikaGame = () => {
     <div className={cx('gameArea')}>
       <div className={cx('gameWrap')} style={{ visibility: isStart ? 'visible' : 'hidden'}}>
         <div className={cx('canvasArea')}>
-          <Header bestScore={bestScore} score={score} bombItemCount={bombItemCount} nextItem={nextItem} onClick={handleBombItem}/>
+          <Header bestScore={bestScore} score={score} bombItemCount={bombItemCount} nextItem={nextItem} onClick={handleBombItem} isStart={isStart} />
           <div id={'canvasWrap'} className={cx('canvasWrap')}/>
         </div>
       </div>
