@@ -22,7 +22,14 @@ const SuikaGame = () => {
   useEffect(() => {
     const bestScore = localStorage.getItem('bestScore');
     if (bestScore) setBestScore(Number(bestScore));
+
+    const bombCount = localStorage.getItem('cumBombCount');
+    if (bombCount) setBombItemCount(Number(bombCount));
   }, [isGameOver]);
+
+  useEffect(() => {
+    localStorage.setItem('cumBombCount', bombItemCount.toString());
+  }, [bombItemCount]);
 
   useEffect(() => {
     if(isGameOver) {
