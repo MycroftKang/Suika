@@ -288,6 +288,9 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
   
     World.remove(engine.world, bomb);
     if (fruits.includes(fruit.label as Fruit)) {
+      const pungSound = new Audio(require('../../resource/pung.mp3'));
+      pungSound.play();
+      
       World.remove(engine.world, fruit);
       
       const index = fruits.indexOf(fruit.label as Fruit);
