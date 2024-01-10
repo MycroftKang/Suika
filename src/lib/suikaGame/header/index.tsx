@@ -2,8 +2,11 @@ import { Fruit, SpecialItem } from '../object/Fruit';
 import { getRenderWidth } from '../object/Size';
 import styles from './index.module.scss';
 import classNames from "classnames/bind";
+import { useState } from 'react';
 
 const cx = classNames.bind(styles);
+
+let lastBombItemCount: number;
 
 interface HeaderProps {
   bestScore: number;
@@ -14,6 +17,8 @@ interface HeaderProps {
 }
 
 const Header = ({ score, bestScore, bombItemCount, nextItem, onClick }: HeaderProps) => {
+  const [isAnimating, setIsAnimating] = useState(false);
+  
   const getBestScore = () => {
     return score > bestScore ? score : bestScore;
   }
@@ -23,6 +28,13 @@ const Header = ({ score, bestScore, bombItemCount, nextItem, onClick }: HeaderPr
   if (bombItemCount > 0) {
     bombItemClass = 'bg-danger';
   }
+
+  if (lastBombItemCount != undefined && bombItemCount > lastBombItemCount) {
+    setIsAnimating(true);
+    setTimeout(() => setIsAnimating(false), 1000);
+  }
+
+  lastBombItemCount = bombItemCount;
 
   return (
     <div className={cx('headerArea')} style={{ maxWidth: getRenderWidth() + 4 }}>
@@ -35,7 +47,7 @@ const Header = ({ score, bestScore, bombItemCount, nextItem, onClick }: HeaderPr
       </div>
       <div className={cx('itemArea')}>
         <div className={cx('next')}>
-          <button className={`${cx('itemBtn')}`} onClick={onClick}>
+          <button className={`${cx('itemBtn')} ${isAnimating ? cx('zoom-in-out'): ''}`} onClick={onClick}>
             <img className={cx('img')} src={require('../../../resource/BOMB.png')}></img>
             <span id='itemBadge' className={`position-absolute start-100 translate-middle badge rounded-pill ${bombItemClass}`} style={{fontSize: "0.6em", top:"85%"}}>
               {bombItemCount}
