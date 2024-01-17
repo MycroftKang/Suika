@@ -258,7 +258,10 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
         }
 
         // 황금 수박이 만들어지면 별 이펙트
-        if(label === Fruit.GOLDWATERMELON) effects.fireRapidStarConfetti();
+        if (label === Fruit.GOLDWATERMELON) {
+          props.setBombItemCount(prev => prev + 2);
+          effects.fireRapidStarConfetti();
+        }
 
         const newFruit = Matter.Bodies.circle(midX, midY, radius, {
           isStatic: false,

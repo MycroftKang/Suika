@@ -33,7 +33,7 @@ const Header = ({ score, bestScore, bombItemCount, nextItem, onClick, isStart }:
   if (isStart) { 
     if ((lastBombItemCount != undefined && bombItemCount > lastBombItemCount)) {
       setIsAnimating(true);
-      setTimeout(() => setIsAnimating(false), 1000);
+      setTimeout(() => setIsAnimating(false), 2000);
     }
     
     lastBombItemCount = bombItemCount;
