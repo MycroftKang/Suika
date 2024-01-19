@@ -2,6 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Test from './test';
 
+// eslint-disable-next-line no-restricted-globals
+history.pushState(null, '', window.location.href);
+
+
 window.addEventListener("beforeunload", (ev) => 
 {  
     ev.preventDefault();
