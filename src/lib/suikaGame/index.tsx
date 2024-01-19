@@ -21,11 +21,6 @@ const SuikaGame = () => {
 
   useEffect(() => {
     const bestScore = localStorage.getItem('bestScore');
-
-    if (bestScore ==='8632') {
-      localStorage.setItem('bestScore', '0');
-    }
-    
     if (bestScore) setBestScore(Number(bestScore));
 
     const bombCount = localStorage.getItem('cumBombCount');
