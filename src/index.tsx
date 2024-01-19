@@ -3,13 +3,22 @@ import ReactDOM from 'react-dom/client';
 import Test from './test';
 
 // eslint-disable-next-line no-restricted-globals
-history.pushState(null, '', window.location.href);
+// history.pushState(null, '', window.location.href);
 
+// const preventGoBack = () => {
+//   // eslint-disable-next-line no-restricted-globals  
+//   history.pushState(null, '', window.location.href);
+//   // alert("I am an alert box!");
+// };
+  
+// window.addEventListener('popstate', preventGoBack);
 
 window.addEventListener("beforeunload", (ev) => 
 {  
     ev.preventDefault();
-    return ev.returnValue = 'Are you sure you want to close?';
+    ev.returnValue = 'Are you sure you want to close?';
+    // eslint-disable-next-line no-restricted-globals  
+    history.pushState(null, '', window.location.href);
 });
 
 console.log(`The orientation of the screen is: ${window.screen.orientation.type}`);
