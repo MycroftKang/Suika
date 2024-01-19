@@ -20,6 +20,14 @@ const SuikaGame = () => {
   const { clear, createFixedItem } = useMatterJS({ score, setScore, bombItemCount, setBombItemCount, nextItem, setNextItem, isGameOver, setIsGameOver });
 
   useEffect(() => {
+    const bestScoreUpdatedAt = localStorage.getItem('bestScoreUpdatedAt');
+
+    if (navigator.userAgent.includes("SM-A326K")) {
+      if (!bestScoreUpdatedAt) {
+        localStorage.setItem('bestScore', '0');
+      }
+    }
+    
     const bestScore = localStorage.getItem('bestScore');
     if (bestScore) setBestScore(Number(bestScore));
 
@@ -40,6 +48,7 @@ const SuikaGame = () => {
       const bestScore = localStorage.getItem('bestScore') || 0;
       if (score > Number(bestScore)) {
         localStorage.setItem('bestScore', score.toString());
+        localStorage.setItem('bestScoreUpdatedAt', new Date().getTime().toString());
       }
     }
   }, [isGameOver]);
