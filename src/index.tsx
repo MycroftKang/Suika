@@ -3,22 +3,25 @@ import ReactDOM from 'react-dom/client';
 import Test from './test';
 
 // eslint-disable-next-line no-restricted-globals
-// history.pushState(null, '', window.location.href);
+history.pushState(null, '', window.location.href);
 
-// const preventGoBack = () => {
-//   // eslint-disable-next-line no-restricted-globals  
-//   history.pushState(null, '', window.location.href);
-//   // alert("I am an alert box!");
-// };
+const preventGoBack = () => {
+  console.log("pop");
+  const result = window.confirm("게임을 종료할까요?");
+  if (result) {
+    window.removeEventListener('popstate', preventGoBack);
+  } else { 
+    // eslint-disable-next-line no-restricted-globals  
+    history.pushState(null, '', window.location.href);
+  }
+};
   
-// window.addEventListener('popstate', preventGoBack);
+window.addEventListener('popstate', preventGoBack);
 
 window.addEventListener("beforeunload", (ev) => 
 {  
     ev.preventDefault();
     ev.returnValue = 'Are you sure you want to close?';
-    // eslint-disable-next-line no-restricted-globals  
-    history.pushState(null, '', window.location.href);
 });
 
 console.log(`The orientation of the screen is: ${window.screen.orientation.type}`);
