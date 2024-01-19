@@ -35,6 +35,13 @@
     color: #000;
     border-radius: 36px;
     cursor: pointer;
+    &:hover {
+        transform: scale(1.05);
+      }
+    
+      &:active {
+        transform: scale(1.1);
+      }
   }
   
   .linkArea {
