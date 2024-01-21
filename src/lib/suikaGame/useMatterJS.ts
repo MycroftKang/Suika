@@ -12,6 +12,8 @@ const { Engine, Render, World, Mouse, MouseConstraint } = Matter;
 const frameInterval = 1000 / 60; // 60fps
 const getImgUrl = (fruit: ItemType) => require('../../resource/' + fruit + '.png');
 
+let scoreMap = new Map<Matter.Body, number>();
+
 let engine = Engine.create();
 let render: Matter.Render | null = null;
 let requestAnimation: number | null = null;
@@ -40,6 +42,7 @@ const init = (props: UseMatterJSProps) => {
   while (canvasWrapEl.hasChildNodes() && canvasWrapEl.firstChild) canvasWrapEl.removeChild(canvasWrapEl.firstChild);
   engine.world.gravity.y = 2.0;
   render = Render.create({ element: canvasWrapEl, engine: engine, options: renderOptions });
+  scoreMap.clear();
   World.add(engine.world, [...Wall]);
   World.add(engine.world, [GameOverGuideLine, GuideLine]);
   nextFruit = props.nextItem;
@@ -184,6 +187,8 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
     fixedItem = null;
     World.add(engine.world, newItem);
 
+    scoreMap.set(newItem, 0);
+
     fixedItemTimeOut = setTimeout(() => {
       GuideLine.render.fillStyle = GuideLineColor;
       World.add(engine.world, GameOverLine);
@@ -218,13 +223,19 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
       
       if (bodyA.label === SpecialItem.BOMB) {
         handleBomb(bodyA, bodyB);
+        return;
       } else if (bodyB.label === SpecialItem.BOMB) {
         handleBomb(bodyB, bodyA);
+        return;
       }
       
       if (labelA === Fruit.GOLDWATERMELON && labelB === Fruit.GOLDWATERMELON) {
         World.remove(engine.world, bodyA);
         World.remove(engine.world, bodyB);
+
+        scoreMap.delete(bodyA);
+        scoreMap.delete(bodyB);
+
         effects.fireConfetti();
 
         const score = getFruitFeature(labelA)?.score || 0;
@@ -277,6 +288,13 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
             }
           }
         });
+        
+        const bodyAScore = scoreMap.get(bodyA) || 0;
+        const bodyBScore = scoreMap.get(bodyB) || 0;
+        scoreMap.set(newFruit, bodyAScore + bodyBScore + score);
+
+        scoreMap.delete(bodyA);
+        scoreMap.delete(bodyB);
 
         World.add(engine.world, newFruit);
         props.setScore(prev => prev + score);
@@ -296,18 +314,9 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
       
       World.remove(engine.world, fruit);
       
-      const index = fruits.indexOf(fruit.label as Fruit);
-      
-      if (index > 4) {
-        const targetFruits = fruits.slice(4, index);
-  
-        let mscore = 0;
-        targetFruits.forEach((element, i) => {
-          mscore += (getFruitFeature(element)?.score || 0) * (2 ** (targetFruits.length - i - 1));
-        });
-  
-        props.setScore(prev => prev - mscore);
-      }
+      const mscore = scoreMap.get(fruit) || 0;
+      scoreMap.delete(fruit);
+      props.setScore(prev => prev - mscore);
     }
     return;
   }
