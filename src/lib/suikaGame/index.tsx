@@ -28,8 +28,8 @@ const SuikaGame = () => {
   }, [isGameOver]);
 
   useEffect(() => {
-    if (bombItemCount > 99) {
-      setBombItemCount(99);
+    if (bombItemCount > 64) {
+      setBombItemCount(64);
       return;
     }
     localStorage.setItem('cumBombCount', bombItemCount.toString());
