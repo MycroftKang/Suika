@@ -19,6 +19,7 @@ interface HeaderProps {
 
 const Header = ({ score, bestScore, bombItemCount, nextItem, onClick, isStart }: HeaderProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
   
   const getBestScore = () => {
     return score > bestScore ? score : bestScore;
@@ -35,8 +36,10 @@ const Header = ({ score, bestScore, bombItemCount, nextItem, onClick, isStart }:
   
   if (isStart) { 
     if ((lastBombItemCount != undefined && bombItemCount > lastBombItemCount)) {
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 1000);
       setIsAnimating(true);
-      setTimeout(() => setIsAnimating(false), 2000);
+      setTimeout(() => setIsAnimating(false), 3000);
     }
     
     lastBombItemCount = bombItemCount;
@@ -53,7 +56,7 @@ const Header = ({ score, bestScore, bombItemCount, nextItem, onClick, isStart }:
       </div>
       <div className={cx('itemArea')}>
         <div className={cx('next')}>
-          <button className={`${cx('itemBtn')} ${isAnimating ? cx('zoom-in-out'): ''}`} onClick={onClick}>
+          <button className={`${cx('itemBtn')} ${isAnimating ? cx('zoom-in-out'): ''} ${isShaking ? cx('shake'): ''}`} onClick={onClick}>
             <img className={cx('img')} src={require('../../../resource/BOMB.png')}></img>
             <span id='itemBadge' className={`position-absolute start-100 translate-middle badge rounded-pill ${bombItemClass}`} style={{fontSize: "0.6em", top:"85%"}}>
               {bombItemCount}
