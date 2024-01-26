@@ -26,9 +26,12 @@ const Header = ({ score, bestScore, bombItemCount, nextItem, onClick, isStart }:
 
   let bombItemClass = 'bg-secondary';
 
-  if (bombItemCount > 0) {
+  if (bombItemCount >= 50) {
+    bombItemClass = 'bg-success';
+  } else if (bombItemCount > 0) {
     bombItemClass = 'bg-danger';
   }
+  
   
   if (isStart) { 
     if ((lastBombItemCount != undefined && bombItemCount > lastBombItemCount)) {
