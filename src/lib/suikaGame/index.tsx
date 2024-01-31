@@ -8,6 +8,7 @@ import Intro from './intro';
 import Header from './header';
 
 const cx = classNames.bind(styles);
+let startBombCount: number | undefined;
 
 const SuikaGame = () => {
   const [bestScore, setBestScore] = useState(0);
@@ -25,6 +26,11 @@ const SuikaGame = () => {
 
     const bombCount = localStorage.getItem('cumBombCount');
     if (bombCount) setBombItemCount(Number(bombCount));
+
+    if (startBombCount === undefined)
+    {
+      startBombCount = Number(bombCount);
+    }
   }, [isGameOver]);
 
   useEffect(() => {
@@ -45,6 +51,15 @@ const SuikaGame = () => {
         localStorage.setItem('bestScore', score.toString());
         localStorage.setItem('bestScoreUpdatedAt', new Date().getTime().toString());
       }
+
+      gtag("event", "game_over", {
+        "score": score,
+        "bestScore": score > Number(bestScore) ? score : Number(bestScore),
+        "bombCount": bombItemCount,
+        "bombCountAtStart": startBombCount,
+        "userAgent": navigator.userAgent,
+        "date": new Date(),
+      })
     }
   }, [isGameOver]);
 
@@ -52,6 +67,7 @@ const SuikaGame = () => {
     setScore(0);
     // setBombItemCount(0);
     setNextItem(getRandomFruitFeature()?.label as Fruit);
+    startBombCount = undefined;
     setIsGameOver(false);
     clear();
   }

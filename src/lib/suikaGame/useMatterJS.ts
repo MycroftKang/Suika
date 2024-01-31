@@ -240,6 +240,12 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
 
         const score = getFruitFeature(labelA)?.score || 0;
         props.setScore(prev => prev + score);
+
+        gtag("event", "mergeGoldWaterMelon", {
+          "score": score,
+          "userAgent": navigator.userAgent,
+          "date": new Date(),
+        })
         return;
       }
 
