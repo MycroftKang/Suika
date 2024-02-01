@@ -69,7 +69,7 @@ export const getItemTypeFeature = (item: ItemType) => {
   return getFruitFeature(item) || getSpecialItemFeature(item)
 }
 
-export const getRandomFruitFeature = () => {
+export const getRandomFruitFeature = (exclude_bomb=false) => {
   // if (first_fruit) {
   //   first_fruit = false;
   //   return getFruitFeature(Fruit.MELON);
@@ -78,9 +78,13 @@ export const getRandomFruitFeature = () => {
   //   return getFruitFeature(Fruit.MELON);
   //   // return getSpecialItemFeature(SpecialItem.BOMB);
   // }
-
-  if (Math.random() < 0.98 || first_fruit) {
+  if (first_fruit)
+  {
     first_fruit = false;
+    exclude_bomb = true;
+  }
+
+  if (Math.random() < 0.98 || exclude_bomb) {
     const fruits = Object.values(Fruit).slice(0, 5);
     const randomIndex = Math.floor(Math.random() * fruits.length); // 무작위 인덱스 선택
     return getFruitFeature(fruits[randomIndex]);

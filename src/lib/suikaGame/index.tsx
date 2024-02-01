@@ -66,7 +66,7 @@ const SuikaGame = () => {
   const handleTryAgain = () => {
     setScore(0);
     // setBombItemCount(0);
-    setNextItem(getRandomFruitFeature()?.label as Fruit);
+    setNextItem(getRandomFruitFeature(true)?.label as Fruit);
     startBombCount = undefined;
     setIsGameOver(false);
     clear();
