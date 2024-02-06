@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Test from './test';
+import {  } from "./firebase";
 
 // eslint-disable-next-line no-restricted-globals
 history.pushState(null, '', window.location.href);

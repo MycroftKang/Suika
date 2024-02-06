@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react';
 import styles from './index.module.scss';
 import classNames from "classnames/bind";
 import useMatterJS from "./useMatterJS";
+import { gameResult } from "./useMatterJS";
 import { Fruit, SpecialItem, getRandomFruitFeature } from './object/Fruit';
 import GameOverModal from './gameOverModal';
 import Intro from './intro';
 import Header from './header';
+import { GameResult } from './GameResult';
+import LeaderBoardModal from './leaderBoardModal';
 
 const cx = classNames.bind(styles);
 let startBombCount: number | undefined;
@@ -17,6 +20,8 @@ const SuikaGame = () => {
   const [nextItem, setNextItem] = useState<Fruit | SpecialItem>(getRandomFruitFeature()?.label as Fruit | SpecialItem);
   const [isStart, setIsStart] = useState<boolean>(false);
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
+  const [isShowRank, setIsShowRank] = useState<boolean>(false);
+  const [loadUserInfo, setLoadUserInfo] = useState<boolean>(false);
 
   const { clear, createFixedItem } = useMatterJS({ score, setScore, bombItemCount, setBombItemCount, nextItem, setNextItem, isGameOver, setIsGameOver });
 
@@ -32,6 +37,14 @@ const SuikaGame = () => {
       startBombCount = Number(bombCount);
     }
   }, [isGameOver]);
+
+  useEffect(() => {
+    const task = async () => {
+      await GameResult.loadUserInfo();
+      setLoadUserInfo(true);
+    }
+    task();
+  }, []);
 
   useEffect(() => {
     if (isStart) {
@@ -50,7 +63,12 @@ const SuikaGame = () => {
       if (score > Number(bestScore)) {
         localStorage.setItem('bestScore', score.toString());
         localStorage.setItem('bestScoreUpdatedAt', new Date().getTime().toString());
+
+        handleShowRankModal();
       }
+
+      gameResult?.gameOver(score, bombItemCount);
+      gameResult?.send().then(()=>{});
 
       gtag("event", "game_over", {
         "score": score,
@@ -83,6 +101,20 @@ const SuikaGame = () => {
   const handleGameStart = () => {
     setIsStart(true);
   }
+  
+  const handleCloseRankModal = () => {
+    setIsShowRank(false);
+  }
+  
+  const handleShowRankModal = () => {
+    if (loadUserInfo) {
+      setIsShowRank(true);
+    }
+  }
+
+  const getBestScore = () => {
+    return score > bestScore ? score : bestScore;
+  }
 
   return (
     <div className={cx('gameArea')}>
@@ -93,8 +125,9 @@ const SuikaGame = () => {
         </div>
       </div>
 
-      <Intro isVisible={!isStart} handleGameStart={handleGameStart}/>
+      <Intro isVisible={!isStart} loadUserInfo={loadUserInfo} handleGameStart={handleGameStart} handleShowRankModal={handleShowRankModal} />
       <GameOverModal isVisible={isGameOver} onClick={handleTryAgain} score={score} />
+      <LeaderBoardModal isVisible={isShowRank} loadUserInfo={loadUserInfo} bestScore={getBestScore()} onClick={handleCloseRankModal}></LeaderBoardModal>
     </div>
   )
 }

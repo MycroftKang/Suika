@@ -1,15 +1,18 @@
 import {Fruit} from '../object/Fruit';
 import styles from './index.module.scss';
 import classNames from "classnames/bind";
+import { GameResult } from "../GameResult";
 
 const cx = classNames.bind(styles);
 
 interface IntroProps {
   isVisible: boolean;
+  loadUserInfo: boolean;
   handleGameStart: () => void;
+  handleShowRankModal: () => void;
 }
 
-const Intro = ({isVisible, handleGameStart}: IntroProps) => {
+const Intro = ({isVisible, loadUserInfo,handleGameStart, handleShowRankModal}: IntroProps) => {
   const positionCircularly = (totalElements: number, index: number) => {
     const radius = 150; // 조절 가능한 원의 반지름
     const angle = (2 * Math.PI * index) / totalElements;
@@ -40,7 +43,13 @@ const Intro = ({isVisible, handleGameStart}: IntroProps) => {
     handleGameStart();
   }
 
-  if(!isVisible) return null;
+  if (!isVisible) return null;
+
+  let userName = "Loading..."
+  
+  if (loadUserInfo) {
+    userName = GameResult.userName;
+  }
 
   return (
     <div className={cx('introArea')}>
@@ -50,8 +59,9 @@ const Intro = ({isVisible, handleGameStart}: IntroProps) => {
         <button className={cx('btn')} onClick={onClick}>GAME START</button>
       </div>
 
-      {/* <a href={'https://github.com/koreacat/suika-game#readme'} target='_blank' className={cx('patchLink')}>패치노트</a> */}
-      <span className={cx('version')}>v1.0.5</span>
+      <button className={`${cx('rank-btn')}`} onClick={handleShowRankModal}>{userName}</button>
+      {/* <a href={'https://github.com/koreacat/suika-game#readme'} target='_blank' className={cx('patchLink')}>{GameResult.userName}</a> */}
+      {/* <span className={cx('version')}>v1.0.5</span> */}
     </div>
   )
 }

@@ -6,6 +6,7 @@ import { getRenderHeight, getRenderWidth } from "./object/Size";
 import { GameOverLine, GameOverGuideLine } from './object/GameOverLine';
 import { GuideLine, GuideLineColor } from './object/GuideLine';
 import useConfetti from "./useConfetti";
+import { GameResult } from "./GameResult";
 
 
 const { Engine, Render, World, Mouse, MouseConstraint } = Matter;
@@ -25,6 +26,7 @@ let nextFruit: ItemType | null = null;
 let prevMergingFruitIds: number[] = [];
 
 let useMatterJSProps: UseMatterJSProps;
+export let gameResult: GameResult | null = null;
 // let bomb = false;
 // let bomb_position: Matter.Vector;
 
@@ -40,6 +42,7 @@ const init = (props: UseMatterJSProps) => {
   const canvasWrapEl = document.getElementById('canvasWrap');
   if (!canvasWrapEl) return;
   while (canvasWrapEl.hasChildNodes() && canvasWrapEl.firstChild) canvasWrapEl.removeChild(canvasWrapEl.firstChild);
+  gameResult = new GameResult();
   engine.world.gravity.y = 2.0;
   render = Render.create({ element: canvasWrapEl, engine: engine, options: renderOptions });
   scoreMap.clear();
@@ -64,6 +67,12 @@ const createFixedItem = (item: Fruit | SpecialItem | null = null) => {
       if (fixedItem.label === item) {
         return false;
       }
+
+      if (item === SpecialItem.BOMB)
+      {
+        gameResult?.useBomb();
+      }
+
       position = fixedItem.position.x;
       World.remove(engine.world, fixedItem);
     }
@@ -241,6 +250,8 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
         const score = getFruitFeature(labelA)?.score || 0;
         props.setScore(prev => prev + score);
 
+        gameResult?.addDetail(Fruit.GOLDWATERMELON);
+
         gtag("event", "mergeGoldWaterMelon", {
           "score": score,
           "userAgent": navigator.userAgent,
@@ -259,6 +270,8 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
 
         World.remove(engine.world, bodyA);
         World.remove(engine.world, bodyB);
+
+        gameResult?.addDetail(bodyA.label);
 
         // 새로운 Fruit 생성 (크기가 한 사이즈 큰 것)
         const feature = getNextFruitFeature(labelA); // 이 함수는 한 사이즈 큰 Fruit 특성을 반환하도록 수정
@@ -323,6 +336,8 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
       const mscore = scoreMap.get(fruit) || 0;
       scoreMap.delete(fruit);
       props.setScore(prev => prev - mscore);
+
+      gameResult?.addDetailBomb(fruit.label, mscore);
     }
     return;
   }
