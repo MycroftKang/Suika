@@ -1,4 +1,4 @@
-import { Fruit } from "./object/Fruit";
+import { Fruit, setItemSizeWeight } from "./object/Fruit";
 import { collection, doc, query, where, getDoc, writeBatch, orderBy, limit, getDocs, DocumentReference, DocumentData } from "firebase/firestore";
 import { db, resultDoc, userDoc, scoreDoc } from "../../firebase";
 import { FirebaseError } from "firebase/app";
@@ -56,6 +56,8 @@ export class GameResult {
     static rankScores: Array<ScoreInfo>;
     static scoreRef: DocumentReference<DocumentData, DocumentData>;
     static loadInfo: boolean = false;
+    static itemSizeConfig: Array<number> = [0.91, 0.93, 0.95, 0.97, 0.99]
+    static currentItemSizeConfig: number;
 
     constructor() {
         this.bestScore = Number(localStorage.getItem('bestScore'));
@@ -63,6 +65,20 @@ export class GameResult {
         this.startAt = new Date();
 
         Object.values(Fruit).map(k => this.detail.set(k, 0));
+        GameResult.applyItemSizeWeight(0);
+    }
+
+    public static applyItemSizeWeight(index: number) {
+        let target = index;
+
+        console.log(index, GameResult.itemSizeConfig.length)
+
+        if (index >= GameResult.itemSizeConfig.length) {
+            target = GameResult.itemSizeConfig.length - 1;
+        }
+
+        GameResult.currentItemSizeConfig = target;
+        setItemSizeWeight(GameResult.itemSizeConfig[target]);
     }
 
     public useBomb() {
@@ -73,6 +89,10 @@ export class GameResult {
     {
         const value = this.detail.get(fruit) || 0
         this.detail.set(fruit, value + 1);
+
+        if (fruit === Fruit.GOLDWATERMELON) {
+            GameResult.applyItemSizeWeight(GameResult.currentItemSizeConfig + 1);
+        }
     }
 
     public addDetailBomb(target :string, score: number)
@@ -102,7 +122,7 @@ export class GameResult {
         }
 
         try {
-            const q = query(collection(db, scoreDoc), where("bestScore", ">", 0), orderBy("bestScore", "desc"), limit(500));
+            const q = query(collection(db, scoreDoc), where("bestScore", ">", 0), orderBy("bestScore", "desc"), limit(99));
             const querySnapshot = await getDocs(q);
             GameResult.rankScores = querySnapshot.docs.map((doc) => {
                 return {id: doc.id, ...doc.data()}
