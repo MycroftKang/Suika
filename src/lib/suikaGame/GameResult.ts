@@ -68,10 +68,18 @@ export class GameResult {
         GameResult.applyItemSizeWeight(0);
     }
 
+    public getMergedCount(fruit: Fruit) {
+        let result = this.detail.get(fruit);
+        if (result) {
+            return result;
+        }
+        else {
+            return 0;
+        }
+    }
+
     public static applyItemSizeWeight(index: number) {
         let target = index;
-
-        console.log(index, GameResult.itemSizeConfig.length)
 
         if (index >= GameResult.itemSizeConfig.length) {
             target = GameResult.itemSizeConfig.length - 1;

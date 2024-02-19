@@ -249,6 +249,7 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
 
         const score = getFruitFeature(labelA)?.score || 0;
         props.setScore(prev => prev + score);
+        props.setBombItemCount(prev => prev + 5);
 
         gameResult?.addDetail(Fruit.GOLDWATERMELON);
 
@@ -283,13 +284,13 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
 
         // 수박이 만들어지면 폭죽 이펙트
         if (label === Fruit.WATERMELON) {
-          props.setBombItemCount(prev => prev + 1);
+          props.setBombItemCount(prev => prev + 1 + (gameResult?.getMergedCount(Fruit.GOLDWATERMELON) || 0));
           effects.fireConfetti();
         }
 
         // 황금 수박이 만들어지면 별 이펙트
         if (label === Fruit.GOLDWATERMELON) {
-          props.setBombItemCount(prev => prev + 1);
+          props.setBombItemCount(prev => prev + 1 + (gameResult?.getMergedCount(Fruit.GOLDWATERMELON) || 0));
           effects.fireRapidStarConfetti();
         }
 
