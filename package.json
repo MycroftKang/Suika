@@ -8,11 +8,18 @@
   "browser": "./browser/specific/main.js",
   "description": "suika-game",
   "author": {
-    "name": "koreacat",
-    "email": "koreacat0w0@gmail.com",
-    "url": "https://github.com/koreacat"
+    "name": "MycroftKang",
+    "email": "thkang0629@gmail.com",
+    "url": "https://github.com/MycroftKang"
   },
-  "license": "koreacat - MIT License",
+  "contributors": [
+    {
+      "name": "koreacat",
+      "email": "koreacat0w0@gmail.com",
+      "url": "https://github.com/koreacat"
+    }
+  ],
+  "license": "MIT License",
   "keywords": [
     "suika",
     "game"
