@@ -57,6 +57,7 @@ export class GameResult {
     static scoreRef: DocumentReference<DocumentData, DocumentData>;
     static loadInfo: boolean = false;
     static itemSizeConfig: Array<number> = [0.91, 0.93, 0.95, 0.97, 0.99]
+    // static itemSizeConfig: Array<number> = [5]
     static currentItemSizeConfig: number;
 
     constructor() {
@@ -203,7 +204,7 @@ export class GameResult {
                 return;
             }
 
-            throw error;
+            // throw error;
         }
     }
 
@@ -256,7 +257,7 @@ export class GameResult {
                 return;
             }
 
-            throw error;
+            // throw error;
         }
     }
 }

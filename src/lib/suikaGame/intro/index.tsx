@@ -19,9 +19,24 @@ interface IntroProps {
   handleShowRankModal: () => void;
 }
 
+const userBrowser = ((agent) => {
+    switch (true) {
+        case agent.indexOf("edge") > -1: return "MS Edge (EdgeHtml)";
+        case agent.indexOf("edg") > -1: return "MS Edge Chromium";
+        case agent.indexOf("samsungbrowser") > -1: return "samsung browser";
+        case agent.indexOf("opr") > -1 && !!(window as any).opr: return "opera";
+        case agent.indexOf("chrome") > -1 && !!(window as any).chrome: return "chrome";
+        case agent.indexOf("trident") > -1: return "Internet Explorer";
+        case agent.indexOf("firefox") > -1: return "firefox";
+        case agent.indexOf("safari") > -1: return "safari";
+        default: return "other";
+    }
+})(window.navigator.userAgent.toLowerCase());
+
 const Intro = ({isVisible, loadUserInfo,handleGameStart, handleShowRankModal}: IntroProps) => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isShowPWACard, setIsShowPWACard] = useState<boolean>(false);
+  const [isShowOpenWithChrome, setIsShowOpenWithChrome] = useState<boolean>(true);
 
   const handleBeforeInstallPrompt = (event: any) => {
     event.preventDefault();
@@ -100,6 +115,18 @@ const Intro = ({isVisible, loadUserInfo,handleGameStart, handleShowRankModal}: I
     setIsShowPWACard(false);
   }
 
+  const handleOpenWithChromeClose = () => {
+    setIsShowOpenWithChrome(false);
+  }
+
+  function isStandalone() {
+    return !!(navigator as any).standalone || window.matchMedia('(display-mode: standalone)').matches;
+  }
+
+  const notSupportPWA = () => {
+    return (userBrowser !== "chrome") && ((window.navigator as any).userAgentData.platform === 'Android') && !isStandalone();
+  }
+
   return (
     <div className={cx('introArea')}>
       <ul className={cx('listWrap')}>{fruitItemEls}</ul>
@@ -125,6 +152,28 @@ const Intro = ({isVisible, loadUserInfo,handleGameStart, handleShowRankModal}: I
               홈 또는 앱스 화면에 바로가기를 추가합니다.
               </Card.Text>
             <Button variant="primary" style={{paddingLeft: "1.5rem", paddingRight: "1.5rem"}} onClick={handleInstall}>홈 화면에 추가</Button>
+          </Card.Body>
+        </Card>
+      </ToastContainer>
+
+      <ToastContainer position="bottom-center" className="p-3" style={{ zIndex: 1, pointerEvents: "auto", display: !isShowPWACard && isShowOpenWithChrome && notSupportPWA() ? "block" : "none"}}>
+        <Card>
+          {/* <Card.Header>Featured</Card.Header> */}
+          <Card.Body>
+            <div className='' style={{display: "flex"}}>
+              <img src="/maskable_icon_x72.png" className="rounded mb-2 me-2" alt="" style={{width: "15%"}}/>
+              <div className='d-flex justify-content-between align-items-center' style={{flex: "auto"}}>
+                <Card.Title>
+                      Suika with Bomb
+                </Card.Title>
+                <CloseButton style={{marginBottom: "0.5rem"}} onClick={handleOpenWithChromeClose}/>
+              </div>
+              </div>
+            <Card.Text style={{marginBottom: "1rem"}}>
+              홈 또는 앱스 화면에 바로가기를 추가하려면 크롬에서 계속하세요.
+              </Card.Text>
+            {/* <Button variant="primary" style={{paddingLeft: "1.5rem", paddingRight: "1.5rem"}} onClick={handleInstall}>크롬에서 열기</Button> */}
+            <a className='btn btn-primary' href="intent://game.mulgyeol.com#Intent;scheme=https;package=com.android.chrome;end">크롬에서 열기</a>
           </Card.Body>
         </Card>
       </ToastContainer>
