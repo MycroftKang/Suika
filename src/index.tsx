@@ -54,12 +54,6 @@ function handleBackEvents() {
 if (exitsOnBack())
   handleBackEvents();
 
-window.addEventListener("beforeunload", (ev) => 
-{  
-    ev.preventDefault();
-    ev.returnValue = 'Are you sure you want to close?';
-});
-
 console.log(`The orientation of the screen is: ${window.screen.orientation.type}`);
 
 const root = ReactDOM.createRoot(
