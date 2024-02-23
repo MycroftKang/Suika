@@ -130,7 +130,7 @@ const Intro = ({isVisible, loadUserInfo,handleGameStart, handleShowRankModal}: I
   }
 
   const notSupportPWA = () => {
-    return (userBrowser !== "chrome") && ((window.navigator as any).userAgentData.platform === 'Android') && !isStandalone();
+    return (userBrowser !== "chrome") && ((window.navigator as any).userAgentData?.platform === 'Android') && !isStandalone();
   }
 
   return (
@@ -179,7 +179,7 @@ const Intro = ({isVisible, loadUserInfo,handleGameStart, handleShowRankModal}: I
               홈 또는 앱스 화면에 바로가기를 추가하려면 크롬에서 계속하세요.
               </Card.Text>
             {/* <Button variant="primary" style={{paddingLeft: "1.5rem", paddingRight: "1.5rem"}} onClick={handleInstall}>크롬에서 열기</Button> */}
-            <a className='btn btn-primary' href="intent://game.mulgyeol.com#Intent;scheme=https;package=com.android.chrome;end">크롬에서 열기</a>
+            <a className='btn btn-primary' style={{paddingLeft: "1.5rem", paddingRight: "1.5rem"}} href="intent://game.mulgyeol.com#Intent;scheme=https;package=com.android.chrome;end">크롬에서 열기</a>
           </Card.Body>
         </Card>
       </ToastContainer>

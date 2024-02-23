@@ -30,7 +30,7 @@ function isStandalone() {
 // Depends on bowser but wouldn't be hard to use a
 // different approach to identifying that we're running on Android
 function exitsOnBack () {
-  return isStandalone() && (window.navigator as any).userAgentData.platform === 'Android';
+  return isStandalone() && (window.navigator as any).userAgentData?.platform === 'Android';
 }
 
 function handleBackEvents() {

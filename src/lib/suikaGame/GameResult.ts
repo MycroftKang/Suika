@@ -222,11 +222,15 @@ export class GameResult {
                     return;
                 }
             }
+            
+            let info = {model: "", platform: ""};
 
-            const info = await (window.navigator as any).userAgentData.getHighEntropyValues([  
-                "model",
-                "platform",
-            ])
+            if ((window.navigator as any).userAgentData) {
+                info = await (window.navigator as any).userAgentData.getHighEntropyValues([  
+                    "model",
+                    "platform",
+                ])
+            }
 
             const batch = writeBatch(db);
             const userRef = doc(collection(db, userDoc));
