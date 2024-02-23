@@ -19,6 +19,10 @@ import {  } from "./firebase";
   
 // window.addEventListener('popstate', preventGoBack);
 
+window.addEventListener('appinstalled', () => {
+  gtag("event", "PWAInstalled", {})
+});
+
 function isStandalone() {
     return !!(navigator as any).standalone || window.matchMedia('(display-mode: standalone)').matches;
 }
