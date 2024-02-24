@@ -14,6 +14,7 @@ jobs:
     concurrency: ci-${{ github.ref }}
     name: Build and Deploy
     runs-on: ubuntu-latest
+    if: github.repository == 'MycroftKang/Suika'
     steps:
       - uses: actions/checkout@v3
       - name: Node.js
