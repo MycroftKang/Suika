@@ -83,11 +83,13 @@ const Intro = ({isVisible, loadUserInfo,handleGameStart, handleShowRankModal}: I
   })
 
   const onClick = async () => {
-    window.addEventListener("beforeunload", (ev) => 
-    {  
-        ev.preventDefault();
-        return (ev.returnValue = 'Are you sure you want to close?');
-    });
+    if (!window.navigator.userAgent.toLowerCase().includes("kakaotalk")) {
+      window.addEventListener("beforeunload", (ev) => 
+      {
+          ev.preventDefault();
+          return (ev.returnValue = 'Are you sure you want to close?');
+      });
+    }
 
     handleGameStart();
   }
