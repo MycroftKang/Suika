@@ -116,8 +116,39 @@ const SuikaGame = () => {
     return score > bestScore ? score : bestScore;
   }
 
+  const share = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: '수박 만들기 게임',
+        text: '폭탄과 과일들을 모아 수박을 만들어보세요.',
+        url: 'https://game.mulgyeol.com/',
+      })
+        .then(() => console.log('done'))
+        .catch((error) => console.log(error));
+    } else {
+      const urlToCopy = window.location.href;
+
+      // Clipboard API를 지원하는지 확인
+      if (document.queryCommandSupported("copy")) {
+        const input = document.createElement("input");
+        input.value = urlToCopy;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand("copy");
+        document.body.removeChild(input);
+      } else {
+        navigator.clipboard.writeText(urlToCopy)
+      }
+    }
+  }
+
   return (
     <div className={cx('gameArea')}>
+      <div className={`${cx('shareButton')} top-0 end-0 p-3`} style={{position: "absolute", zIndex: 1, pointerEvents: "auto", display: !isStart ? "block" : "none"}}>
+        <button type="button" className='btn' onClick={share} style={{width: "1.8em", height: "1.8em", padding: 0, opacity: "0.85"}}>
+        <img src="/share.svg" className="" alt="" style={{width: "1.8em"}}/>
+        </button>
+      </div>
       <div className={cx('gameWrap')} style={{ visibility: isStart ? 'visible' : 'hidden'}}>
         <div className={cx('canvasArea')}>
           <Header bestScore={bestScore} score={score} bombItemCount={bombItemCount} nextItem={nextItem} onClick={handleBombItem} isStart={isStart} />

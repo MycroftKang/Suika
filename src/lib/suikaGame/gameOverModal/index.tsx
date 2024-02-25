@@ -72,6 +72,11 @@ const GameOverModal = ({ isVisible, onClick, score }: GameOverModalProps) => {
 
   return (
     <div className={cx('gameOverArea')}>
+      <div className="top-0 end-0 p-3" style={{position: "absolute", zIndex: 1, pointerEvents: "auto"}}>
+        <button type="button" className='btn' onClick={share} style={{width: "1.8em", height: "1.8em", padding: 0, opacity: "0.85"}}>
+        <img src="/share.svg" className="" alt="" style={{width: "1.8em"}}/>
+        </button>
+      </div>
       <span className={cx('text')}>GAME OVER</span>
       <span className={cx('score')}>SCORE: {score}</span>
       <div id='gframe' className={cx('gframe')}></div>
