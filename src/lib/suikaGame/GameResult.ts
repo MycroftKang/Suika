@@ -114,6 +114,15 @@ export class GameResult {
         this.score = score;
         this.renewBestScore = score > this.bestScore;
         this.bombCount = bombCount;
+
+        if (this.renewBestScore) {
+            gtag("event", "renewBestScore", {
+                "score": score,
+                "prevScore": this.bestScore,
+                "userAgent": navigator.userAgent,
+                "date": this.endAt,
+            })
+        }
     }
 
     public getUserRankScore()

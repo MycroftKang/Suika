@@ -91,7 +91,7 @@ const LeaderBoardModal = ({ isVisible, loadUserInfo, bestScore, onClick }: Leade
         </li> */}
         {ready ? <li className={`list-group-item d-flex justify-content-between align-items-center ${cx("my-rank-list")}`}>
            <div>
-              <span className={`badge bg-primary rounded-pill ${cx("my-rank-badge")}`}>{myRank}</span>
+              <span className={`badge bg-primary rounded-pill ${cx("my-rank-badge")}`}>{myRank === 0 ? "99+" : myRank}</span>
               <span className={cx("my-rank-name")}>{GameResult.userName}</span>
           </div>
           <div className='fw-bold' style={{fontSize: "1.2em"}}>
