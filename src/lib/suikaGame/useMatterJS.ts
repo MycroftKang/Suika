@@ -24,6 +24,7 @@ let fixedItem: Matter.Body | null = null; // 고정된 아이템
 let prevPosition = { x: getRenderWidth() / 2, y: 50 };
 let nextFruit: ItemType | null = null;
 let prevMergingFruitIds: number[] = [];
+let dropping: boolean = false;
 
 let useMatterJSProps: UseMatterJSProps;
 export let gameResult: GameResult | null = null;
@@ -48,7 +49,7 @@ const init = (props: UseMatterJSProps) => {
   scoreMap.clear();
   World.add(engine.world, [...Wall]);
   World.add(engine.world, [GameOverGuideLine, GuideLine]);
-  nextFruit = props.nextItem;
+  nextFruit = getRandomFruitFeature(true)?.label as Fruit;
   useMatterJSProps = props;
   createFixedItem();
 };
@@ -56,6 +57,7 @@ const init = (props: UseMatterJSProps) => {
 const createFixedItem = (item: Fruit | SpecialItem | null = null) => {
   if (fixedItem && !item) return false;
   if (!nextFruit) return false;
+  if (dropping) return false;
 
   let target: Fruit | SpecialItem;
   let position: number = prevPosition.x;
@@ -165,6 +167,7 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
   Matter.Events.on(mouseConstraint, 'enddrag', (event: any) => {
     // 원의 고정 해제
     if (!fixedItem) return;
+    dropping = true;
     setPositionFixedItem(event);
 
     const popSound = new Audio(require('../../resource/pop.mp3'));
@@ -201,6 +204,7 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
     fixedItemTimeOut = setTimeout(() => {
       GuideLine.render.fillStyle = GuideLineColor;
       World.add(engine.world, GameOverLine);
+      dropping = false;
       createFixedItem();
     }, 750);
   });

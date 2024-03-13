@@ -56,8 +56,8 @@ export class GameResult {
     static rankScores: Array<ScoreInfo>;
     static scoreRef: DocumentReference<DocumentData, DocumentData>;
     static loadInfo: boolean = false;
-    static itemSizeConfig: Array<number> = [0.91, 0.93, 0.95, 0.97, 0.99]
-    // static itemSizeConfig: Array<number> = [5]
+    static itemSizeConfig: Array<number> = [0.91, 0.93, 0.96, 1, 1.2, 1.4]
+    // static itemSizeConfig: Array<number> = [3]
     static currentItemSizeConfig: number;
 
     constructor() {
