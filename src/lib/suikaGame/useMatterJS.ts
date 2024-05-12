@@ -253,7 +253,7 @@ const event = (props: UseMatterJSProps, effects: { fireConfetti: () => void, fir
 
         const score = getFruitFeature(labelA)?.score || 0;
         props.setScore(prev => prev + score);
-        props.setBombItemCount(prev => prev + 5);
+        //props.setBombItemCount(prev => prev + 5);
 
         gameResult?.addDetail(Fruit.GOLDWATERMELON);
 
