@@ -100,6 +100,8 @@ const Intro = ({isVisible, loadUserInfo,handleGameStart, handleShowRankModal}: I
   
   if (loadUserInfo) {
     userName = GameResult.userName;
+  } else if (GameResult.isNewUser()) {
+    userName = "Welcome";
   }
 
   const handleInstall = () => {

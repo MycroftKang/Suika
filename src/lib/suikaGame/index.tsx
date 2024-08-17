@@ -40,8 +40,10 @@ const SuikaGame = () => {
 
   useEffect(() => {
     const task = async () => {
-      await GameResult.loadUserInfo();
-      setLoadUserInfo(true);
+      if (!GameResult.isNewUser()) {
+        await GameResult.loadUserInfo();
+        setLoadUserInfo(true);
+      }
     }
     task();
   }, []);
@@ -60,6 +62,7 @@ const SuikaGame = () => {
   useEffect(() => {
     if(isGameOver) {
       const bestScore = localStorage.getItem('bestScore') || 0;
+      
       if (score > Number(bestScore)) {
         localStorage.setItem('bestScore', score.toString());
         localStorage.setItem('bestScoreUpdatedAt', new Date().getTime().toString());
@@ -68,7 +71,15 @@ const SuikaGame = () => {
       }
 
       gameResult?.gameOver(score, bombItemCount);
-      gameResult?.send().then(()=>{});
+
+      if (loadUserInfo) {
+        gameResult?.send().then(() => { });
+      } else if (GameResult.isNewUser()) {
+        setLoadUserInfo(true);
+        GameResult.loadUserInfo().then(() => {
+          gameResult?.send().then(() => { });
+        });
+      }
 
       gtag("event", "game_over", {
         "score": score,
@@ -109,6 +120,11 @@ const SuikaGame = () => {
   const handleShowRankModal = () => {
     if (loadUserInfo) {
       setIsShowRank(true);
+    } else if (GameResult.isNewUser()) {
+      setLoadUserInfo(true);
+      GameResult.loadUserInfo().then(() => {
+        setIsShowRank(true);
+      });
     }
   }
 

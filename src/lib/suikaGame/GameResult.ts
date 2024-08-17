@@ -50,7 +50,7 @@ export class GameResult {
     score: number | undefined;
     usedBombCount: number = 0;
     static userId: string;
-    static userName: string = "Apple123";
+    static userName: string = "New User";
     static userAgent: string = navigator.userAgent;
     static network: boolean = true;
     static rankScores: Array<ScoreInfo>;
@@ -215,6 +215,12 @@ export class GameResult {
 
             // throw error;
         }
+    }
+
+    public static isNewUser() {
+        let userId = localStorage.getItem('userId');
+
+        return userId ? false : true;
     }
 
     public static async loadUserInfo() {
