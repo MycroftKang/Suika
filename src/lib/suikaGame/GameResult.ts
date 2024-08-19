@@ -202,7 +202,7 @@ export class GameResult {
                     userAgent: GameResult.userAgent,
                 })
 
-                batch.update(GameResult.scoreRef, {bestScore: this.score, result: resultRef, createdAt: this.endAt})
+                batch.update(GameResult.scoreRef, {bestScore: this.score, result: resultRef, createdAt: this.endAt, url: window.location.href});
                 await batch.commit();
             }
 
@@ -252,7 +252,7 @@ export class GameResult {
             const scoreRef = doc(collection(db, scoreDoc));
 
             const name = getRandomUserName();
-            batch.set(scoreRef, { bestScore: Number(localStorage.getItem('bestScore')), name: name, createdAt: new Date() })
+            batch.set(scoreRef, { bestScore: Number(localStorage.getItem('bestScore')), name: name, createdAt: new Date(), url: window.location.href })
 
             batch.set(userRef, {});
             const userInfoRef = doc(collection(userRef, "info"), "value");

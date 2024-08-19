@@ -22,6 +22,7 @@ const SuikaGame = () => {
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [isShowRank, setIsShowRank] = useState<boolean>(false);
   const [loadUserInfo, setLoadUserInfo] = useState<boolean>(false);
+  const [loadedUserInfo, setLoadedUserInfo] = useState<boolean>(false);
 
   const { clear, createFixedItem } = useMatterJS({ score, setScore, bombItemCount, setBombItemCount, nextItem, setNextItem, isGameOver, setIsGameOver });
 
@@ -41,8 +42,9 @@ const SuikaGame = () => {
   useEffect(() => {
     const task = async () => {
       if (!GameResult.isNewUser()) {
-        await GameResult.loadUserInfo();
         setLoadUserInfo(true);
+        await GameResult.loadUserInfo();
+        setLoadedUserInfo(true);
       }
     }
     task();
@@ -66,18 +68,25 @@ const SuikaGame = () => {
       if (score > Number(bestScore)) {
         localStorage.setItem('bestScore', score.toString());
         localStorage.setItem('bestScoreUpdatedAt', new Date().getTime().toString());
-
-        handleShowRankModal();
       }
 
       gameResult?.gameOver(score, bombItemCount);
 
-      if (loadUserInfo) {
-        gameResult?.send().then(() => { });
-      } else if (GameResult.isNewUser()) {
+      if (loadedUserInfo) {
+        gameResult?.send().then(() => {
+          if (score > Number(bestScore)) {
+            handleShowRankModal();
+          }
+        });
+      } else if (!loadUserInfo && GameResult.isNewUser()) {
         setLoadUserInfo(true);
         GameResult.loadUserInfo().then(() => {
-          gameResult?.send().then(() => { });
+          setLoadedUserInfo(true);
+          gameResult?.send().then(() => {
+            if (score > Number(bestScore)) {
+              handleShowRankModal();
+            }
+          });
         });
       }
 
@@ -118,11 +127,12 @@ const SuikaGame = () => {
   }
   
   const handleShowRankModal = () => {
-    if (loadUserInfo) {
+    if (loadedUserInfo) {
       setIsShowRank(true);
-    } else if (GameResult.isNewUser()) {
+    } else if (!loadUserInfo && GameResult.isNewUser()) {
       setLoadUserInfo(true);
       GameResult.loadUserInfo().then(() => {
+        setLoadedUserInfo(true);
         setIsShowRank(true);
       });
     }
@@ -172,7 +182,7 @@ const SuikaGame = () => {
         </div>
       </div>
 
-      <Intro isVisible={!isStart} loadUserInfo={loadUserInfo} handleGameStart={handleGameStart} handleShowRankModal={handleShowRankModal} />
+      <Intro isVisible={!isStart} loadedUserInfo={loadedUserInfo} handleGameStart={handleGameStart} handleShowRankModal={handleShowRankModal} />
       <GameOverModal isVisible={isGameOver} onClick={handleTryAgain} score={score} />
       <LeaderBoardModal isVisible={isShowRank} loadUserInfo={loadUserInfo} bestScore={getBestScore()} onClick={handleCloseRankModal}></LeaderBoardModal>
     </div>

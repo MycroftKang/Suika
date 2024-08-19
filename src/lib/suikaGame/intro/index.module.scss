@@ -45,14 +45,14 @@
 
   .patchLink {
     position: fixed;
-    bottom: 2em;
+    bottom: 3.5em;
       font-size: 1.5em;
       color: #ffffff;
     }
     
     .version {
       position: fixed;
-    bottom: 1.5em;
+    bottom: 2em;
       font-size: 1em;
     color: #ffffff;
   }
@@ -63,7 +63,7 @@
   font-family: Pretendard, sans-serif;
     font-size: 1.5em;
     color: #ffffff;
-  bottom: 2em;
+  bottom: 3.5em;
     transition: transform 0.4s ease-in-out;
     cursor: pointer;
 }

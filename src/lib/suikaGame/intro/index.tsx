@@ -14,7 +14,7 @@ const cx = classNames.bind(styles);
 
 interface IntroProps {
   isVisible: boolean;
-  loadUserInfo: boolean;
+  loadedUserInfo: boolean;
   handleGameStart: () => void;
   handleShowRankModal: () => void;
 }
@@ -33,7 +33,7 @@ const userBrowser = ((agent) => {
     }
 })(window.navigator.userAgent.toLowerCase());
 
-const Intro = ({isVisible, loadUserInfo,handleGameStart, handleShowRankModal}: IntroProps) => {
+const Intro = ({isVisible, loadedUserInfo, handleGameStart, handleShowRankModal}: IntroProps) => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isShowPWACard, setIsShowPWACard] = useState<boolean>(false);
   const [isShowOpenWithChrome, setIsShowOpenWithChrome] = useState<boolean>(true);
@@ -98,7 +98,7 @@ const Intro = ({isVisible, loadUserInfo,handleGameStart, handleShowRankModal}: I
 
   let userName = "Loading..."
   
-  if (loadUserInfo) {
+  if (loadedUserInfo) {
     userName = GameResult.userName;
   } else if (GameResult.isNewUser()) {
     userName = "Welcome";
@@ -190,7 +190,7 @@ const Intro = ({isVisible, loadUserInfo,handleGameStart, handleShowRankModal}: I
 
       <button className={`${cx('rank-btn')}`} onClick={handleShowRankModal}>{userName}</button>
       {/* <a href={'https://github.com/MycroftKang/Suika#readme'} target='_blank' className={cx('patchLink')}>{GameResult.userName}</a> */}
-      {/* <span className={cx('version')}>v1.0.5</span> */}
+      <a className={cx('version')} href={'https://github.com/MycroftKang/Suika'}>© Mycroft Kang & Contributors</a>
     </div>
   )
 }
