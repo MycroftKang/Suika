@@ -75,7 +75,7 @@ const SuikaGame = () => {
       if (loadedUserInfo) {
         gameResult?.send().then(() => {
           if (score > Number(bestScore)) {
-            handleShowRankModal();
+            setIsShowRank(true);
           }
         });
       } else if (!loadUserInfo && GameResult.isNewUser()) {
@@ -84,7 +84,7 @@ const SuikaGame = () => {
           setLoadedUserInfo(true);
           gameResult?.send().then(() => {
             if (score > Number(bestScore)) {
-              handleShowRankModal();
+              setIsShowRank(true);
             }
           });
         });
@@ -184,7 +184,7 @@ const SuikaGame = () => {
 
       <Intro isVisible={!isStart} loadedUserInfo={loadedUserInfo} handleGameStart={handleGameStart} handleShowRankModal={handleShowRankModal} />
       <GameOverModal isVisible={isGameOver} onClick={handleTryAgain} score={score} />
-      <LeaderBoardModal isVisible={isShowRank} loadUserInfo={loadUserInfo} bestScore={getBestScore()} onClick={handleCloseRankModal}></LeaderBoardModal>
+      <LeaderBoardModal isVisible={isShowRank} loadUserInfo={loadedUserInfo} bestScore={getBestScore()} onClick={handleCloseRankModal}></LeaderBoardModal>
     </div>
   )
 }
