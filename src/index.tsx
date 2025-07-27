@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import Test from './test';
-import {  } from "./firebase";
-
+import { } from "./firebase";
+import "./i18n"
+import i18next from "i18next";
+import { HelmetProvider } from "react-helmet-async";
 // eslint-disable-next-line no-restricted-globals
 // history.pushState(null, '', window.location.href);
 
@@ -62,6 +64,15 @@ const root = ReactDOM.createRoot(
 
 let firstLandscape = false;
 
+function setRotateScreenText() {
+  const el = document.querySelector("#rotateScreen p");
+  if (el) {
+    el.textContent = i18next.t("rotate_screen.text");
+  }
+}
+
+setRotateScreenText();
+
 function handleRotation(first: boolean = false) {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -105,5 +116,15 @@ window.addEventListener("orientationchange", () => {
   handleRotation();
 })
 
+i18next.on('languageChanged', (lng) => {
+  document.documentElement.lang = lng;
+});
 
-root.render(<Test/>);
+document.documentElement.lang = i18next.language;
+
+
+root.render(
+  <HelmetProvider>
+    <Test />
+  </HelmetProvider>
+);

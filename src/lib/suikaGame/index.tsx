@@ -9,11 +9,15 @@ import Intro from './intro';
 import Header from './header';
 import { GameResult } from './GameResult';
 import LeaderBoardModal from './leaderBoardModal';
+import { Helmet } from 'react-helmet-async';
+import { useTranslation } from "react-i18next";
 
 const cx = classNames.bind(styles);
 let startBombCount: number | undefined;
 
 const SuikaGame = () => {
+  const { t } = useTranslation();
+  
   const [bestScore, setBestScore] = useState(0);
   const [score, setScore] = useState(0);
   const [bombItemCount, setBombItemCount] = useState<number>(0);
@@ -169,6 +173,15 @@ const SuikaGame = () => {
   }
 
   return (
+    <>
+    <Helmet>
+        <title>{t("meta.title")}</title>
+        <meta name="title" content={t("meta.title") as string} />
+        <meta name="description" content={t("meta.description") as string} />
+        <meta name="keywords" content={t("meta.keywords") as string} />
+        <meta property="og:title" content={t("meta.title") as string} />
+        <meta property="og:description" content={t("meta.description") as string} />
+    </Helmet>
     <div className={cx('gameArea')}>
       <div className={`${cx('shareButton')} top-0 end-0 p-3`} style={{position: "absolute", zIndex: 1, pointerEvents: "auto", display: !isStart ? "block" : "none"}}>
         <button type="button" className='btn' onClick={share} style={{width: "1.8em", height: "1.8em", padding: 0, opacity: "0.85"}}>
@@ -185,7 +198,8 @@ const SuikaGame = () => {
       <Intro isVisible={!isStart} loadedUserInfo={loadedUserInfo} handleGameStart={handleGameStart} handleShowRankModal={handleShowRankModal} />
       <GameOverModal isVisible={isGameOver} onClick={handleTryAgain} score={score} />
       <LeaderBoardModal isVisible={isShowRank} loadUserInfo={loadedUserInfo} bestScore={getBestScore()} onClick={handleCloseRankModal}></LeaderBoardModal>
-    </div>
+      </div>
+    </>
   )
 }
 

@@ -1,0 +1,16 @@
+{
+    "meta": {
+        "title": "Suika Game with Bomb",
+        "description": "Suika Game with Bomb | Collect bombs and fruits to make a watermelon.",
+        "keywords": "suika, watermelon, game, bomb, fruit, making, mobile game"
+    },
+    "rotate_screen": {
+        "text": "Please rotate your mobile device to portrait mode."
+    },
+    "intro": {
+        "shortcut_notice_description": "Add a shortcut to your Home or Apps screen.",
+        "shortcut_notice_install_button": "Add to Home Screen",
+        "shortcut_notice_chrome": "To add a shortcut to your Home or Apps screen, continue in Chrome.",
+        "shortcut_notice_chrome_button": "Open in Chrome"
+    }
+}

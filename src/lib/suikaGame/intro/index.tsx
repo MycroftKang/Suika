@@ -7,8 +7,7 @@ import ToastContainer from 'react-bootstrap/ToastContainer';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import CloseButton from 'react-bootstrap/CloseButton';
-
-
+import { useTranslation } from "react-i18next";
 
 const cx = classNames.bind(styles);
 
@@ -34,6 +33,13 @@ const userBrowser = ((agent) => {
 })(window.navigator.userAgent.toLowerCase());
 
 const Intro = ({isVisible, loadedUserInfo, handleGameStart, handleShowRankModal}: IntroProps) => {
+  const { t } = useTranslation();
+
+  // useEffect(()=>{
+  //   const titleElement = document.getElementsByTagName('title')[0]
+  //   titleElement.innerHTML = t("intro.suika_with_bomb_title");
+  // },[])
+  
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isShowPWACard, setIsShowPWACard] = useState<boolean>(false);
   const [isShowOpenWithChrome, setIsShowOpenWithChrome] = useState<boolean>(true);
@@ -159,9 +165,9 @@ const Intro = ({isVisible, loadedUserInfo, handleGameStart, handleShowRankModal}
               </div>
               </div>
             <Card.Text style={{marginBottom: "1rem"}}>
-              홈 또는 앱스 화면에 바로가기를 추가합니다.
+              {t("intro.shortcut_notice_description")}
               </Card.Text>
-            <Button variant="primary" style={{paddingLeft: "1.5rem", paddingRight: "1.5rem"}} onClick={handleInstall}>홈 화면에 추가</Button>
+            <Button variant="primary" style={{ paddingLeft: "1.5rem", paddingRight: "1.5rem" }} onClick={handleInstall}>{t("intro.shortcut_notice_install_button")}</Button>
           </Card.Body>
         </Card>
       </ToastContainer>
@@ -180,10 +186,10 @@ const Intro = ({isVisible, loadedUserInfo, handleGameStart, handleShowRankModal}
               </div>
               </div>
             <Card.Text style={{marginBottom: "1rem"}}>
-              홈 또는 앱스 화면에 바로가기를 추가하려면 크롬에서 계속하세요.
+              {t("intro.shortcut_notice_chrome")}
               </Card.Text>
             {/* <Button variant="primary" style={{paddingLeft: "1.5rem", paddingRight: "1.5rem"}} onClick={handleInstall}>크롬에서 열기</Button> */}
-            <a className='btn btn-secondary' style={{paddingLeft: "1.5rem", paddingRight: "1.5rem"}} href="intent://game.mulgyeol.com#Intent;scheme=https;package=com.android.chrome;end">크롬에서 열기</a>
+            <a className='btn btn-secondary' style={{ paddingLeft: "1.5rem", paddingRight: "1.5rem" }} href="intent://game.mulgyeol.com#Intent;scheme=https;package=com.android.chrome;end">{t("intro.shortcut_notice_chrome_button")}</a>
           </Card.Body>
         </Card>
       </ToastContainer>

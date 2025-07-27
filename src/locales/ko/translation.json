@@ -1,0 +1,16 @@
+{
+    "meta": {
+        "title": "수박 만들기 게임",
+        "description": "수박 만들기 게임 | 폭탄과 과일들을 모아 수박을 만들어보세요.",
+        "keywords": "수박, 게임, 폭탄, 과일, 만들기, 모바일 게임"
+    },
+    "rotate_screen": {
+        "text": "모바일 기기를 세로 방향으로 회전해주세요."
+    },
+    "intro":{
+        "shortcut_notice_description": "홈 또는 앱스 화면에 바로가기를 추가합니다.",
+        "shortcut_notice_install_button": "홈 화면에 추가",
+        "shortcut_notice_chrome": "홈 또는 앱스 화면에 바로가기를 추가하려면 크롬에서 계속하세요.",
+        "shortcut_notice_chrome_button": "크롬에서 열기"
+    }
+}
