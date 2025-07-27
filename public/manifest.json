@@ -1,6 +1,7 @@
 {
   "name": "Suika with Bomb",
   "short_name": "Suika",
+  "version": "1.1.1",
   "icons": [
     {
       "src": "/maskable_icon_x72.png",
