@@ -23,7 +23,7 @@ i18n
       escapeValue: false
     },
     detection: {
-      order: ['querystring', 'cookie', 'navigator', 'localStorage', 'sessionStorage', 'htmlTag'],
+      order: ['querystring', 'navigator', 'cookie', 'localStorage', 'sessionStorage', 'htmlTag'],
       caches: ['cookie'],
       cookieMinutes: 10,
     },
